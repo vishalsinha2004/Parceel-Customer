@@ -2,12 +2,24 @@ import React, { useState } from 'react';
 import api from '../api/axios';
 
 const Signup = ({ onSignupSuccess, switchToLogin }) => {
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  // --- FIX: Added phone_number to state ---
+  const [formData, setFormData] = useState({ username: '', email: '', phone_number: '', password: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Quick validation
+    if (!formData.phone_number || formData.phone_number.length < 10) {
+        alert("Please enter a valid phone number (at least 10 digits).");
+        return;
+    }
+
     try {
       await api.post('auth/signup/', formData); 
+      
+      // Save it locally so the Profile tab can show it immediately after they log in
+      localStorage.setItem('indora_customer_phone', formData.phone_number);
+      
       alert("✅ Account created! Please login.");
       switchToLogin();
     } catch (error) {
@@ -37,7 +49,7 @@ const Signup = ({ onSignupSuccess, switchToLogin }) => {
               placeholder="Username" 
               onChange={(e) => setFormData({...formData, username: e.target.value})} 
               required 
-              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400"
+              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400 font-bold text-slate-700"
             />
           </div>
 
@@ -46,10 +58,22 @@ const Signup = ({ onSignupSuccess, switchToLogin }) => {
             <input 
               name="email" 
               type="email" 
-              placeholder="Email" 
+              placeholder="Email Address" 
               onChange={(e) => setFormData({...formData, email: e.target.value})} 
               required 
-              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400"
+              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400 font-bold text-slate-700"
+            />
+          </div>
+
+          {/* --- NEW: Phone Number Input --- */}
+          <div className="flex flex-col">
+            <input 
+              name="phone_number" 
+              type="tel" 
+              placeholder="Phone Number (e.g. 9876543210)" 
+              onChange={(e) => setFormData({...formData, phone_number: e.target.value})} 
+              required 
+              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400 font-bold text-slate-700"
             />
           </div>
 
@@ -61,14 +85,14 @@ const Signup = ({ onSignupSuccess, switchToLogin }) => {
               placeholder="Password" 
               onChange={(e) => setFormData({...formData, password: e.target.value})} 
               required 
-              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400"
+              className="p-4 rounded-2xl bg-slate-50 border-none shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:ring-4 ring-blue-100 outline-none transition-all placeholder:text-slate-400 font-bold text-slate-700"
             />
           </div>
 
           {/* Button with Claymorphism "Squishy" Effect */}
           <button 
             type="submit" 
-            className="mt-4 p-4 rounded-2xl bg-blue-600 text-white font-bold text-lg shadow-[4px_4px_10px_rgba(37,99,235,0.3),inset_-4px_-4px_8px_rgba(0,0,0,0.2),inset_4px_4px_8px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-[0.98] active:shadow-inner transition-all"
+            className="mt-4 p-4 rounded-2xl bg-blue-600 text-white font-bold text-lg shadow-[4px_4px_10px_rgba(37,99,235,0.3),inset_-4px_-4px_8px_rgba(0,0,0,0.2),inset_4px_4px_8px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-[0.98] active:shadow-inner transition-all tracking-wide"
           >
             Create Account
           </button>
