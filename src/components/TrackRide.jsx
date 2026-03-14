@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import axios from '../api/axios';
 
-const socket = io('http://localhost:8000');
+const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:8000');
 
 export default function CustomerTrackRide({ orderId }) {
   const [order, setOrder] = useState(null);
