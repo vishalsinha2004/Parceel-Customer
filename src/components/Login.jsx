@@ -9,8 +9,8 @@ const Login = ({ onLoginSuccess, switchToSignup }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post('auth/login/', { 
-        username: formData.username, 
+          const response = await api.post('/api/auth/login/', {
+          username: formData.username, 
         password: formData.password 
       });
 

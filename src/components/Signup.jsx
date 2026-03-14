@@ -15,8 +15,7 @@ const Signup = ({ onSignupSuccess, switchToLogin }) => {
     }
 
     try {
-      await api.post('auth/signup/', formData); 
-      
+       await api.post('/api/auth/signup/', formData);      
       // Save it locally so the Profile tab can show it immediately after they log in
       localStorage.setItem('indora_customer_phone', formData.phone_number);
       
